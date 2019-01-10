@@ -12,8 +12,8 @@ import {
 } from "react-redux-firebase";
 import { createFirestoreInstance, firestoreReducer } from "redux-firestore";
 import { fbConfig } from "./firebase.config";
-
-import Home from "./Home.jsx";
+//
+import MyApp from "./App";
 
 const rrfConfig = {
   userProfile: "users",
@@ -21,7 +21,8 @@ const rrfConfig = {
 };
 
 firebase.initializeApp(fbConfig);
-firebase.firestore();
+const firestore = firebase.firestore();
+firestore.settings({ timestampsInSnapshots: true });
 
 const rootReducer = combineReducers({
   firebase: firebaseReducer,
@@ -45,7 +46,7 @@ const rrfProps = {
 const App = () => (
   <Provider store={store}>
     <ReactReduxFirebaseProvider {...rrfProps}>
-      <Home />
+      <MyApp />
     </ReactReduxFirebaseProvider>
   </Provider>
 );
