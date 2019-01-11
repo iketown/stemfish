@@ -2,6 +2,9 @@ import React from "react";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import theme from "./pirateTheme";
+//
+import CurrentUser from "../util/CurrentUser";
+import SnackBar from "../components/SnackBar";
 
 function withRoot(Component) {
   function WithRoot(props) {
@@ -10,6 +13,7 @@ function withRoot(Component) {
       <MuiThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
+        <CurrentUser />
         <Component {...props} />
       </MuiThemeProvider>
     );

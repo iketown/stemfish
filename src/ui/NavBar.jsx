@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { firestoreConnect } from "react-redux-firebase";
+import { Link } from "react-router-dom";
 //
 import { withStyles } from "@material-ui/core/styles";
 import {
@@ -32,20 +33,25 @@ const styles = {
 
 class NavBar extends Component {
   state = {
-    open: true
+    signInOpen: false
   };
 
-  handleClickOpen = () => {
-    this.setState({ open: true });
+  handleSignInOpen = () => {
+    this.setState({ signInOpen: true });
+  };
+  handleSignOut = () => {
+    const { firebase } = this.props;
+    firebase.auth().signOut();
   };
 
-  handleClose = () => {
-    this.setState({ open: false });
+  handleSignInClose = () => {
+    this.setState({ signInOpen: false });
   };
   componentDidUpdate() {}
   render() {
     const { classes } = this.props;
-    const { displayName, email } = this.props.currentUser;
+    const { displayName, email, isEmpty, isLoaded } = this.props.auth;
+    const loggedIn = isLoaded && !isEmpty;
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -60,17 +66,27 @@ class NavBar extends Component {
             <Typography variant="h6" color="inherit" className={classes.title}>
               StemFish
             </Typography>
-            {displayName && (
-              <Button color="inherit" onClick={this.handleClickOpen}>
-                {displayName}
+            {displayName && <Button color="inherit">{displayName}</Button>}
+            {loggedIn ? (
+              <>
+                <Button component={Link} to="/songs" color="inherit">
+                  my songs
+                </Button>
+                <Button color="inherit" onClick={this.handleSignOut}>
+                  sign out
+                </Button>
+              </>
+            ) : (
+              <Button color="inherit" onClick={this.handleSignInOpen}>
+                sign in
               </Button>
             )}
-            <Button color="inherit" onClick={this.handleClickOpen}>
-              Login
-            </Button>
           </Toolbar>
         </AppBar>
-        <SignInUp open={this.state.open} handleClose={this.handleClose} />
+        <SignInUp
+          open={this.state.signInOpen}
+          handleClose={this.handleSignInClose}
+        />
       </div>
     );
   }
@@ -81,7 +97,7 @@ NavBar.propTypes = {
 };
 
 const mapState = state => ({
-  currentUser: state.firebase.auth
+  auth: state.firebase.auth
 });
 
 export default compose(

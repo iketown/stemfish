@@ -14,6 +14,7 @@ import { createFirestoreInstance, firestoreReducer } from "redux-firestore";
 import { fbConfig } from "./firebase.config";
 //
 import MyApp from "./App";
+import { currentReducer } from "./reducers/currentReducer";
 
 const rrfConfig = {
   userProfile: "users",
@@ -26,7 +27,8 @@ firestore.settings({ timestampsInSnapshots: true });
 
 const rootReducer = combineReducers({
   firebase: firebaseReducer,
-  firestore: firestoreReducer
+  firestore: firestoreReducer,
+  current: currentReducer
 });
 
 const initialState = {};
